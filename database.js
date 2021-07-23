@@ -1,10 +1,11 @@
 import mariadb from 'mariadb';
 import Sequelize from 'sequelize';
+require('dotenv').config();
 
-const pool = mariadb.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'rolan105d',
+/* const pool = mariadb.createPool({
+    host: process.env.REACT_APP_DB_HOST,
+    user: process.env.REACT_APP_DB_USER,
+    password: process.env.REACT_APP_DB_PASSWORD,
     connectionLimit: 1
 });
 
@@ -24,28 +25,16 @@ export async function asyncFunction() {
     } finally {
         if (conn) return conn.end();
     }
-}
+} */
 
 // Option 2: Passing parameters separately (other dialects)
-const sequelize = new Sequelize('test', 'root', 'rolan105d', {
-    host: 'localhost',
+// 아래 'test'는 호스트안의 데이터베이스 이름, 테이블이 아님
+const sequelize = new Sequelize('test', process.env.REACT_APP_DB_USER, process.env.REACT_APP_DB_PASSWORD, {
+    host: process.env.REACT_APP_DB_HOST,
     dialect: 'mariadb'
 });
 
-// const Users = sequelize.define('Users', {
-//     // Model attributes are defined here
-//     id: {
-//         type: Sequelize.NUMBER,
-//         allowNull: false,
-//         primaryKey: true
-//     },
-//     name: {
-//         type: Sequelize.STRING
-//         // allowNull defaults to true
-//     }
-// }, {
-//     // Other model options go here
-// });
+// 아래 'test-tbl'은 데이터베이스 내의 테이블 이름
 const Test = sequelize.define('test-tbl', {
     // Model attributes are defined here
     id: {
@@ -65,14 +54,9 @@ const Test = sequelize.define('test-tbl', {
 
 
 export async function logFunction() {
-    const test = await Test.findAll({ attributes: ['id', 'name'] });
-    console.log(test[0].id);
-    console.log(test.length);
-    const test2 = await Test.create({ name:"million" });
-    console.log(11,test2);
+    const insert = await Test.create({ name:"million" });
+    console.log(insert);
+    const select = await Test.findAll({ attributes: ['id', 'name'] });
+    console.log(select[0].id);
+    console.log(select.length);
 }
-
-// const shoot=null;
-// const jane = async () => {
-//     shoot = await Users.create({ name: "Doe" });
-// }

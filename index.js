@@ -10,5 +10,5 @@ app.listen(port, function () {
   console.log(`application is listening on port ${port}...`)
 })
 
-asyncFunction();
+// asyncFunction();
 logFunction();
